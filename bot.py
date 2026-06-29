@@ -152,7 +152,7 @@ app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("pay", pay))
 app.add_handler(CommandHandler("status", status))
 app.add_handler(CommandHandler("help", help_command))
-app.add_handler(CallbackQueryHandler(button_handler))
 app.add_handler(conv_handler)
+app.add_handler(CallbackQueryHandler(button_handler))
 
 app.run_polling()
