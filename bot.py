@@ -1,8 +1,8 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = "8606026877:AAHgkAard8UFyn_DAC3OShCuqW5qbVqUDG4"
-
+import os 
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🏥 Welcome to HouseJob Helper!\n\n"
