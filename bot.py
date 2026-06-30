@@ -21,7 +21,7 @@ async def pay(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "💳 Payment is currently being updated.\n\n"
         "We're switching to a new payment provider — please check back shortly!\n\n"
-        "Need help? Contact @yourusername"
+        "Need help? Contact @Angel_Mandarin"
     )
 
 async def activate(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -81,7 +81,7 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🔍 Checking your slot status... not active yet.")
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Need help? Contact us at @yourusername")
+    await update.message.reply_text("Need help? Contact us at @Angel_Mandarin")
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("❌ Cancelled. Type /start to begin again.")
