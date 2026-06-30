@@ -50,4 +50,59 @@ async def hospital_type_chosen(update: Update, context: ContextTypes.DEFAULT_TYP
 
 async def hospital_choices(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["hospitals"] = update.message.text
-    await
+    await update.message.reply_text(
+        "🔑 Now enter your MDCN registration number:"
+    )
+    return MDCN_NUMBER
+
+async def mdcn_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["mdcn"] = update.message.text
+    await update.message.reply_text(
+        "🔒 Now enter your housemanship portal password:\n\n"
+        "⚠️ Your details are encrypted and used ONLY to secure your slot."
+    )
+    return PORTAL_PASSWORD
+
+async def portal_password(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["password"] = update.message.text
+    hospitals = context.user_data.get("hospitals")
+    mdcn = context.user_data.get("mdcn")
+
+    await update.message.reply_text(
+        f"✅ All details received!\n\n"
+        f"🏥 Hospitals: {hospitals}\n"
+        f"🔑 MDCN: {mdcn}\n\n"
+        f"🤖 Your slot grabber is now ACTIVE!\n"
+        f"We will check every 60 seconds and notify you the moment your slot is secured! 🎯"
+    )
+    return ConversationHandler.END
+
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔍 Checking your slot status... not active yet.")
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Need help? Contact us at @yourusername")
+
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("❌ Cancelled. Type /start to begin again.")
+    return ConversationHandler.END
+
+conv_handler = ConversationHandler(
+    entry_points=[CommandHandler("activate", activate)],
+    states={
+        HOSPITAL_TYPE: [CallbackQueryHandler(hospital_type_chosen)],
+        HOSPITAL_CHOICES: [MessageHandler(filters.TEXT & ~filters.COMMAND, hospital_choices)],
+        MDCN_NUMBER: [MessageHandler(filters.TEXT & ~filters.COMMAND, mdcn_number)],
+        PORTAL_PASSWORD: [MessageHandler(filters.TEXT & ~filters.COMMAND, portal_password)],
+    },
+    fallbacks=[CommandHandler("cancel", cancel)]
+)
+
+app = ApplicationBuilder().token(BOT_TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("pay", pay))
+app.add_handler(CommandHandler("status", status))
+app.add_handler(CommandHandler("help", help_command))
+app.add_handler(conv_handler)
+
+app.run_polling()
